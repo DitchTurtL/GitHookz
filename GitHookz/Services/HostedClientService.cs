@@ -24,8 +24,6 @@ public class HostedClientService : IHostedService
         _client.Log += LogAsync;
 
         await _interactionHandler.InitializeAsync();
-
-        Log.Information($"Logging in: {_token}");
         await _client.LoginAsync(TokenType.Bot, _token);
         await _client.StartAsync();
     }
