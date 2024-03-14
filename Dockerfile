@@ -24,6 +24,7 @@ WORKDIR /app
 COPY --from=publish /app/publish .
 USER root
 RUN chown -R app:app /app/Data
+WORKDIR /app/Logs
 RUN chown -R app:app /app/Logs
 USER app
 ENTRYPOINT ["dotnet", "GitHookz.dll"]
