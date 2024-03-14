@@ -36,7 +36,6 @@ public class InteractionHandler
         _handler.InteractionExecuted += HandleInteractionExecute;
     }
 
-
     private async Task LogAsync(LogMessage log)
         => Console.WriteLine(log);
 
@@ -82,7 +81,6 @@ public class InteractionHandler
         }
     }
 
-
     private async Task HandleInteractionExecute(ICommandInfo commandInfo, IInteractionContext context, Discord.Interactions.IResult result)
     {
         if (!result.IsSuccess)
@@ -95,8 +93,4 @@ public class InteractionHandler
                     break;
             }
     }
-
-
-
-
 }

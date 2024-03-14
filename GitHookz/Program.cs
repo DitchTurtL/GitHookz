@@ -5,8 +5,6 @@ using Octokit.Webhooks;
 using Octokit.Webhooks.AspNetCore;
 using Serilog;
 using Serilog.Events;
-using System.Text;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +33,7 @@ builder.Services
     .AddSingleton(x => new InteractionService(x.GetRequiredService<DiscordSocketClient>()))
     .AddSingleton<InteractionHandler>()
     .AddSingleton<WebhookEventProcessor, EventProcessor>()
+    .AddSingleton<IDatabaseService, DatabaseService>()
     .AddHostedService<HostedClientService>();
 
 var app = builder.Build();
