@@ -8,5 +8,5 @@ services:
       args:
         - BUILD_CONFIGURATION=Release
     ports:
-      - "8080:8080"
-      - "8081:8081"
+      - "5048:5048"
+      - "5049:5049"
