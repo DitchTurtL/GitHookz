@@ -22,6 +22,8 @@ RUN dotnet publish "./GitHookz.csproj" -c $BUILD_CONFIGURATION -o /app/publish /
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+USER root
 RUN chown -R app:app /app/Data
 RUN chown -R app:app /app/Logs
+USER app
 ENTRYPOINT ["dotnet", "GitHookz.dll"]
