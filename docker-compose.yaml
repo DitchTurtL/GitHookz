@@ -10,3 +10,6 @@ services:
     ports:
       - "5048:5048"
       - "5049:5049"
+    volumes:
+      - ./data:/app/Data
+      - ./logs:/app/Logs

@@ -15,9 +15,9 @@ public class DatabaseService : IDatabaseService
             Directory.CreateDirectory(StringConstants.BASE_DATA_PATH);
 
         Log.Information("Loading WebHook Data");
-        if (File.Exists(StringConstants.WEBHOOK_DATA_FILE))
+        if (File.Exists(StringConstants.WEBHOOK_DATA_FILEPATH))
         {
-            var lines = File.ReadAllLines(StringConstants.WEBHOOK_DATA_FILE);
+            var lines = File.ReadAllLines(StringConstants.WEBHOOK_DATA_FILEPATH);
             foreach (var line in lines)
             {
                 WebHookData hook;
@@ -47,8 +47,8 @@ public class DatabaseService : IDatabaseService
         // Add the hook
         webHookDatas.Add(data);
 
-        Log.Information($"Writing webhook data to file: {StringConstants.WEBHOOK_DATA_FILE}");
-        File.AppendAllLines(StringConstants.WEBHOOK_DATA_FILE, new string[] { data.Type + ":" + data.RecipientId + ":" + data.RepoFullname });
+        Log.Information($"Writing webhook data to file: {StringConstants.WEBHOOK_DATA_FILEPATH}");
+        File.AppendAllLines(StringConstants.WEBHOOK_DATA_FILEPATH, new string[] { data.Type + ":" + data.RecipientId + ":" + data.RepoFullname });
         return true;
     }
 

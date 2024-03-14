@@ -36,11 +36,7 @@ public class WebHookModule : InteractionModuleBase<SocketInteractionContext>
         var data = new WebHookData(type, channelId, repoFullName);
         var success = _databaseService.AddWebHookData(data);
 
-        // TODO: Keep track of the repo details so when we get a webhook we can send it to the right place
-
-        await RespondAsync($"Your repo was added. Use this URL for your webhook: {_config["external_url"]}{_config["webhook_endpoint"]}");
+        var webhookUrl = $"{_config["external_url"]}{_config["webhook_endpoint"]}";
+        await RespondAsync($"Your repo was added. Use this URL for your webhook: {webhookUrl}");
     }
-
-    public async Task Echo(string echo, [Summary(description: "mention the user")] bool mention = false)
-    => await RespondAsync(echo + (mention ? Context.User.Mention : string.Empty));
 }

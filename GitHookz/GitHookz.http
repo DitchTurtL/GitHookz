@@ -1,6 +1,0 @@
-@GitHookz_HostAddress = http://localhost:5048
-
-GET {{GitHookz_HostAddress}}/webhook/
-Accept: application/json
-
-###
