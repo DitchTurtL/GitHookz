@@ -15,12 +15,12 @@ Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
     .Enrich.FromLogContext()
     .WriteTo.Console()
-    .WriteTo.File("log.txt", rollingInterval: RollingInterval.Day)
+    .WriteTo.File($"{StringConstants.LOG_DIR}/{StringConstants.LOG_FILE}", rollingInterval: RollingInterval.Day)
     .CreateLogger();
 
 Log.Information("Loading Configuration");
 var _configuration = new ConfigurationBuilder()
-    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+    .AddJsonFile("Data/appsettings.json", optional: true, reloadOnChange: true)
     .AddEnvironmentVariables()
     .Build();
 
@@ -49,6 +49,6 @@ app.MapGitHubWebhooks(webhookEndpoint);
 
 var externalUrl = _configuration["external_url"] ?? StringConstants.DEFAULT_EXTERNAL_URL;
 app.Urls.Add(externalUrl);
-Log.Information($"Listening on {externalUrl}{webhookEndpoint}");
 
+Log.Information($"Listening on {externalUrl}{webhookEndpoint}");
 app.Run();
