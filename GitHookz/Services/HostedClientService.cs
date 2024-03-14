@@ -9,10 +9,12 @@ public class HostedClientService : IHostedService
     private readonly IInteractionHandler _interactionHandler;
     private readonly DiscordSocketClient _client;
     private readonly IConfiguration _configuration;
+    private readonly string _token;
 
     public HostedClientService(IConfiguration configuration, IInteractionHandler interactionHandler, DiscordSocketClient client)
     {
         _configuration = configuration;
+        _token = _configuration["discord_token"] ?? "Missing Token";
         _interactionHandler = interactionHandler;
         _client = client;
     }
@@ -23,9 +25,8 @@ public class HostedClientService : IHostedService
 
         await _interactionHandler.InitializeAsync();
 
-        var token = _configuration["discord_token"];
-        Log.Information($"Logging in: {token}");
-        await _client.LoginAsync(TokenType.Bot, token);
+        Log.Information($"Logging in: {_token}");
+        await _client.LoginAsync(TokenType.Bot, _token);
         await _client.StartAsync();
     }
 
