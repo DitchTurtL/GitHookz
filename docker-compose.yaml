@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  githookz:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - BUILD_CONFIGURATION=Release
+    ports:
+      - "8080:8080"
+      - "8081:8081"
