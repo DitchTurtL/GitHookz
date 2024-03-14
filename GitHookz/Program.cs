@@ -5,8 +5,6 @@ using Octokit.Webhooks;
 using Octokit.Webhooks.AspNetCore;
 using Serilog;
 using Serilog.Events;
-using System.Text;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 var builder = WebApplication.CreateBuilder(args);
 
