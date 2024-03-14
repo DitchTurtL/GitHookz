@@ -31,7 +31,7 @@ builder.Services
     })
     .AddSingleton<DiscordSocketClient>()
     .AddSingleton(x => new InteractionService(x.GetRequiredService<DiscordSocketClient>()))
-    .AddSingleton<InteractionHandler>()
+    .AddSingleton<IInteractionHandler, InteractionHandler>()
     .AddSingleton<WebhookEventProcessor, EventProcessor>()
     .AddSingleton<IDatabaseService, DatabaseService>()
     .AddHostedService<HostedClientService>();
