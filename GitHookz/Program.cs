@@ -41,7 +41,7 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 app.UseHttpsRedirection();
-app.MapGitHubWebhooks("/webhooks");
+app.MapGitHubWebhooks("/webhook");
 
 app.Urls.Add("http://192.168.0.36:5048/");
 app.Run();
