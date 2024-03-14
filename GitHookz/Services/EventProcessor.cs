@@ -1,4 +1,5 @@
-﻿using Octokit.Webhooks;
+﻿using GitHookz.Data;
+using Octokit.Webhooks;
 using Octokit.Webhooks.Events;
 using Octokit.Webhooks.Events.PullRequest;
 
@@ -33,12 +34,15 @@ public class EventProcessor : WebhookEventProcessor
     {
         var repoName = pullRequestEvent.Repository?.FullName ?? "Unknown";
         var targets = _databaseService.GetWebHookDataByRepoFullName(repoName);
+        var actionText = StringConstants.ToTitleCase(pullRequestEvent.Action ?? "Interacted with") + " a Pull Request";
+
+
         foreach (var target in targets)
             _interactionHandler.SendMessageAsync(
                 target.RecipientId, 
-                "Pull Request", 
+                pullRequestEvent.Repository?.Name ?? "Unknown Repo", 
                 pullRequestEvent.Sender?.Login ?? "Unknown User", 
-                pullRequestEvent.Action ?? "Unknown Action", 
+                actionText,
                 pullRequestEvent.PullRequest?.Title ?? "No Title",
                 pullRequestEvent.Sender?.AvatarUrl ?? "", 
                 pullRequestEvent.PullRequest?.HtmlUrl ?? ""
