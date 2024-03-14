@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace GitHookz.Services;
 
-public class InteractionHandler
+public class InteractionHandler : IInteractionHandler
 {
     private readonly DiscordSocketClient _client;
     private readonly InteractionService _handler;
@@ -92,5 +92,14 @@ public class InteractionHandler
                 default:
                     break;
             }
+    }
+
+    public Task SendMessageAsync(string channelId)
+    {
+        var channel = _client.GetChannel(ulong.Parse(channelId)) as IMessageChannel;
+        if (channel == null)
+            return Task.CompletedTask;
+
+        return channel.SendMessageAsync("Hello, World!");
     }
 }

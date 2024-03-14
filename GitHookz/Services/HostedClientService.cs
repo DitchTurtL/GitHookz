@@ -5,12 +5,12 @@ namespace GitHookz.Services;
 
 public class HostedClientService : IHostedService
 {
-    private readonly InteractionHandler _interactionHandler;
+    private readonly IInteractionHandler _interactionHandler;
     private readonly DiscordSocketClient _client;
     private readonly IConfiguration _configuration;
     private readonly ILogger<HostedClientService> _logger;
 
-    public HostedClientService(ILogger<HostedClientService> logger, IConfiguration configuration, InteractionHandler interactionHandler, DiscordSocketClient client)
+    public HostedClientService(ILogger<HostedClientService> logger, IConfiguration configuration, IInteractionHandler interactionHandler, DiscordSocketClient client)
     {
         _logger = logger;
         _configuration = configuration;

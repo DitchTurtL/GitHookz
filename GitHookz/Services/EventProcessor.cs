@@ -7,10 +7,12 @@ namespace GitHookz.Services;
 public class EventProcessor : WebhookEventProcessor
 {
     private readonly IDatabaseService _databaseService;
+    private readonly IInteractionHandler _interactionHandler;
 
-    public EventProcessor(IDatabaseService databaseService)
+    public EventProcessor(IDatabaseService databaseService, IInteractionHandler interactionHandler)
     {
         _databaseService = databaseService;
+        _interactionHandler = interactionHandler;
     }
 
     protected override Task ProcessCreateWebhookAsync(WebhookHeaders headers, CreateEvent createEvent)
@@ -31,6 +33,9 @@ public class EventProcessor : WebhookEventProcessor
     {
         var repoName = pullRequestEvent.Repository?.FullName ?? "Unknown";
         var targets = _databaseService.GetWebHookDataByRepoFullName(repoName);
+        foreach (var target in targets)
+            _interactionHandler.SendMessageAsync(target.RecipientId);
+
 
         return base.ProcessPullRequestWebhookAsync(headers, pullRequestEvent, action);
     }
