@@ -1,0 +1,33 @@
+2024-03-14 17:06:26.359 -04:00 [INF] Loading Configuration
+2024-03-14 17:06:26.385 -04:00 [INF] Initializing Services
+2024-03-14 17:06:26.440 -04:00 [INF] Listening on http://192.168.0.36:5048/webhook
+2024-03-14 17:06:26.511 -04:00 [INF] Loading WebHook Data
+2024-03-14 17:06:26.522 -04:00 [INF] Discord.Net v3.13.1 (API v10)
+2024-03-14 17:06:46.060 -04:00 [INF] Loading Configuration
+2024-03-14 17:06:46.086 -04:00 [INF] Initializing Services
+2024-03-14 17:06:46.151 -04:00 [INF] Listening on http://192.168.0.36:5048/webhook
+2024-03-14 17:06:46.227 -04:00 [INF] Loading WebHook Data
+2024-03-14 17:06:46.239 -04:00 [INF] Discord.Net v3.13.1 (API v10)
+2024-03-14 17:06:46.245 -04:00 [INF] Connecting
+2024-03-14 17:06:47.019 -04:00 [INF] You're using the GuildScheduledEvents gateway intent without listening to any events related to that intent, consider removing the intent from your config.
+2024-03-14 17:06:47.020 -04:00 [INF] You're using the GuildInvites gateway intent without listening to any events related to that intent, consider removing the intent from your config.
+2024-03-14 17:06:47.021 -04:00 [INF] Connected
+2024-03-14 17:06:47.683 -04:00 [INF] Ready
+2024-03-14 17:07:41.124 -04:00 [INF] Loading Configuration
+2024-03-14 17:07:41.148 -04:00 [INF] Initializing Services
+2024-03-14 17:07:41.202 -04:00 [INF] Listening on http://72.84.99.164:5048/webhook
+2024-03-14 17:07:41.275 -04:00 [INF] Loading WebHook Data
+2024-03-14 17:07:41.290 -04:00 [INF] Discord.Net v3.13.1 (API v10)
+2024-03-14 17:07:41.298 -04:00 [INF] Connecting
+2024-03-14 17:08:06.692 -04:00 [INF] Loading Configuration
+2024-03-14 17:08:06.718 -04:00 [INF] Initializing Services
+2024-03-14 17:08:06.768 -04:00 [INF] Listening on http://192.168.0.36:5048/webhook
+2024-03-14 17:08:06.853 -04:00 [INF] Loading WebHook Data
+2024-03-14 17:08:06.864 -04:00 [INF] Discord.Net v3.13.1 (API v10)
+2024-03-14 17:08:06.871 -04:00 [INF] Connecting
+2024-03-14 17:08:07.514 -04:00 [INF] You're using the GuildScheduledEvents gateway intent without listening to any events related to that intent, consider removing the intent from your config.
+2024-03-14 17:08:07.515 -04:00 [INF] You're using the GuildInvites gateway intent without listening to any events related to that intent, consider removing the intent from your config.
+2024-03-14 17:08:07.515 -04:00 [INF] Connected
+2024-03-14 17:08:08.168 -04:00 [INF] Ready
+2024-03-14 17:09:01.787 -04:00 [INF] Adding webhook data for C:1155971639117369415:DitchTurtL/GitHookz
+2024-03-14 17:09:01.787 -04:00 [INF] Writing webhook data to file: C:\dev\GitHookz\GitHookz\bin\Debug\net8.0\\GitHookz\Data\webhooks.dat

@@ -1,5 +1,6 @@
 using Discord.Interactions;
 using Discord.WebSocket;
+using GitHookz.Data;
 using GitHookz.Services;
 using Octokit.Webhooks;
 using Octokit.Webhooks.AspNetCore;
@@ -9,20 +10,22 @@ using Serilog.Events;
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure logger
-var _logger = new LoggerConfiguration()
-    .WriteTo.Console(LogEventLevel.Information)
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
     .WriteTo.File("log.txt", rollingInterval: RollingInterval.Day)
     .CreateLogger();
 
-// Build configuration
+Log.Information("Loading Configuration");
 var _configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
     .AddEnvironmentVariables()
     .Build();
 
-// Add services to the container
+Log.Information("Initializing Services");
 builder.Services
-    .AddSingleton<Serilog.ILogger>(_logger)
     .AddSingleton(_configuration)
     .AddSingleton(new DiscordSocketConfig()
     {
@@ -40,7 +43,12 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 app.UseHttpsRedirection();
-app.MapGitHubWebhooks("/webhook");
 
-app.Urls.Add("http://192.168.0.36:5048/");
+var webhookEndpoint = _configuration["webhook_endpoint"] ?? StringConstants.DEFAULT_WEBHOOK_ENDPOINT;
+app.MapGitHubWebhooks(webhookEndpoint);
+
+var externalUrl = _configuration["external_url"] ?? StringConstants.DEFAULT_EXTERNAL_URL;
+app.Urls.Add(externalUrl);
+Log.Information($"Listening on {externalUrl}{webhookEndpoint}");
+
 app.Run();

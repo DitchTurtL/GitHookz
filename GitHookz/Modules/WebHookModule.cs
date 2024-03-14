@@ -1,7 +1,6 @@
 ﻿using Discord.Interactions;
 using Discord;
 using GitHookz.Data.Models;
-using GitHookz.Data;
 using GitHookz.Services;
 
 namespace GitHookz.Modules;
@@ -35,11 +34,11 @@ public class WebHookModule : InteractionModuleBase<SocketInteractionContext>
         var repoFullName = $"{repoDetails.Owner}/{repoDetails.Repo}";
 
         var data = new WebHookData(type, channelId, repoFullName);
-        _databaseService.AddWebHookData(data);
+        var success = _databaseService.AddWebHookData(data);
 
         // TODO: Keep track of the repo details so when we get a webhook we can send it to the right place
 
-        await RespondAsync($"Your repo was added. Use this URL for your webhook: {_config["webhookUrl"]}");
+        await RespondAsync($"Your repo was added. Use this URL for your webhook: {_config["external_url"]}{_config["webhook_endpoint"]}");
     }
 
     public async Task Echo(string echo, [Summary(description: "mention the user")] bool mention = false)

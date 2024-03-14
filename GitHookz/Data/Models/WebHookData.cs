@@ -2,10 +2,14 @@
 
 public class WebHookData
 {
-    public string Type { get; set; }
-    public string RecipientId { get; set; }
-    public string RepoFullname { get; set; }
+    public string Type { get; set; } = string.Empty;
+    public string RecipientId { get; set; } = string.Empty;
+    public string RepoFullname { get; set; } = string.Empty;
 
+    /// <summary>
+    ///     T:{thread_id}:{webhook_url}
+    ///     C:{channel_id}:{webhook_url}
+    /// </summary>
     public WebHookData(string data)
     {
         if (string.IsNullOrEmpty(data))
@@ -26,5 +30,10 @@ public class WebHookData
         Type = type;
         RecipientId = recipientId;
         RepoFullname = repoFullname;
+    }
+
+    public override string ToString()
+    {
+        return $"{Type}:{RecipientId}:{RepoFullname}";
     }
 }
