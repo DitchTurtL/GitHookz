@@ -46,9 +46,10 @@ app.UseHttpsRedirection();
 
 var webhookEndpoint = _configuration["webhook_endpoint"] ?? StringConstants.DEFAULT_WEBHOOK_ENDPOINT;
 app.MapGitHubWebhooks(webhookEndpoint);
-
 var externalUrl = _configuration["external_url"] ?? StringConstants.DEFAULT_EXTERNAL_URL;
-app.Urls.Add(externalUrl);
 
+var urls = _configuration["AllowedHosts"] ?? "*";
+app.Urls.Add(urls);
 Log.Information($"Listening on {externalUrl}{webhookEndpoint}");
+Log.Information($"Hosting on {urls}");
 app.Run();
