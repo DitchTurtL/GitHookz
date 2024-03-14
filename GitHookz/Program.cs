@@ -26,7 +26,7 @@ var _configuration = new ConfigurationBuilder()
 
 Log.Information("Initializing Services");
 builder.Services
-    .AddSingleton(_configuration)
+    .AddSingleton<IConfiguration>(_configuration)
     .AddSingleton(new DiscordSocketConfig()
     {
         GatewayIntents = Discord.GatewayIntents.AllUnprivileged | Discord.GatewayIntents.GuildMembers,
