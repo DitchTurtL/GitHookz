@@ -4,7 +4,7 @@ using Serilog;
 
 namespace GitHookz.Services;
 
-public class DatabaseService
+public class DatabaseService : IDatabaseService
 {
     private List<WebHookData> webHookDatas = new List<WebHookData>();
 

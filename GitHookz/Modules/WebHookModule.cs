@@ -1,50 +1,47 @@
 ﻿using Discord.Interactions;
 using Discord;
+using GitHookz.Data.Models;
+using GitHookz.Data;
+using GitHookz.Services;
 
 namespace GitHookz.Modules;
 
 public class WebHookModule : InteractionModuleBase<SocketInteractionContext>
 {
+    private readonly IConfiguration _config;
+    private readonly IDatabaseService _databaseService;
 
-    [SlashCommand("add_webhook", "Add a new webhook")]
-    public async Task AddWebhook()
+    public WebHookModule(IConfiguration config, IDatabaseService databaseService)
     {
-        /*var user = await _userService.GetUser(Context.User);
-        var challengeLink = await _challengeService.CreateChallengeLink(user);
-
-        await RespondAsync($"New Challenge created. Use this link to update it: {challengeLink}");*/
+        _config = config;
+        _databaseService = databaseService;
     }
-    /*
-    [SlashCommand("challenges", "List all active challenges")]
-    public async Task Challenges()
+
+    [SlashCommand("add_webhook", "Create a new webhook at this location for your project repo.")]
+    public async Task AddWebhook([Summary(description: "Repo URL")] string repoUrl)
     {
-        var challenges = await _challengeService.GetActiveChallenges();
-
-        var embed = new EmbedBuilder()
-            .WithTitle("Active Challenges")
-            .WithDescription("Here are all the active challenges")
-            .WithColor(Color.Blue);
-
-        foreach (var challenge in challenges)
+        string type = string.Empty;
+        if (Context.Channel is IThreadChannel)
         {
-            var url = StringConstants.BASE_CHALLENGE_URL + challenge.Stub;
-            var description = $"[**{challenge.Title}**]({url})\n{challenge.Description}";
-            embed.AddField("\u200B", description);
+            type = "T";
+        }
+        else
+        {
+            type = "C";
         }
 
-        var channel = Context.Channel as ITextChannel;
-        if (channel != null)
-            await channel.SendMessageAsync(embed: embed.Build());
+        var channelId = Context.Channel.Id.ToString();
+        var repoDetails = RepoDetails.GetRepoDetails(repoUrl);
+        var repoFullName = $"{repoDetails.Owner}/{repoDetails.Repo}";
+
+        var data = new WebHookData(type, channelId, repoFullName);
+        _databaseService.AddWebHookData(data);
+
+        // TODO: Keep track of the repo details so when we get a webhook we can send it to the right place
+
+        await RespondAsync($"Your repo was added. Use this URL for your webhook: {_config["webhookUrl"]}");
     }
-    */
 
     public async Task Echo(string echo, [Summary(description: "mention the user")] bool mention = false)
     => await RespondAsync(echo + (mention ? Context.User.Mention : string.Empty));
-
-
-
-
-
-
-
 }

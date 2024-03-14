@@ -6,8 +6,17 @@ namespace GitHookz.Services;
 
 public class EventProcessor : WebhookEventProcessor
 {
+    private readonly IDatabaseService _databaseService;
+
+    public EventProcessor(IDatabaseService databaseService)
+    {
+        _databaseService = databaseService;
+    }
+
     protected override Task ProcessCreateWebhookAsync(WebhookHeaders headers, CreateEvent createEvent)
     {
+        var repoName = createEvent.Repository?.FullName ?? "Unknown";
+
         return base.ProcessCreateWebhookAsync(headers, createEvent);
     }
 

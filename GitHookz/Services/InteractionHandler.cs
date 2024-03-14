@@ -36,7 +36,6 @@ public class InteractionHandler
         _handler.InteractionExecuted += HandleInteractionExecute;
     }
 
-
     private async Task LogAsync(LogMessage log)
         => Console.WriteLine(log);
 
