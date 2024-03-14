@@ -34,7 +34,15 @@ public class EventProcessor : WebhookEventProcessor
         var repoName = pullRequestEvent.Repository?.FullName ?? "Unknown";
         var targets = _databaseService.GetWebHookDataByRepoFullName(repoName);
         foreach (var target in targets)
-            _interactionHandler.SendMessageAsync(target.RecipientId);
+            _interactionHandler.SendMessageAsync(
+                target.RecipientId, 
+                "Pull Request", 
+                pullRequestEvent.Sender?.Login ?? "Unknown User", 
+                pullRequestEvent.Action ?? "Unknown Action", 
+                pullRequestEvent.PullRequest?.Title ?? "No Title",
+                pullRequestEvent.Sender?.AvatarUrl ?? "", 
+                pullRequestEvent.PullRequest?.HtmlUrl ?? ""
+                );
 
 
         return base.ProcessPullRequestWebhookAsync(headers, pullRequestEvent, action);
