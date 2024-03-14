@@ -2,9 +2,9 @@
 
 public class RepoDetails
 {
-    public string Owner { get; set; }
-    public string Repo { get; set; }
-    public string Url { get; set; }
+    public string Owner { get; set; } = string.Empty;
+    public string Repo { get; set; } = string.Empty;
+    public string Url { get; set; } = string.Empty;
 
     public static RepoDetails GetRepoDetails(string url)
     {

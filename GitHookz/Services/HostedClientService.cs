@@ -1,5 +1,6 @@
 ﻿using Discord.WebSocket;
 using Discord;
+using Serilog;
 
 namespace GitHookz.Services;
 
@@ -8,11 +9,9 @@ public class HostedClientService : IHostedService
     private readonly IInteractionHandler _interactionHandler;
     private readonly DiscordSocketClient _client;
     private readonly IConfiguration _configuration;
-    private readonly ILogger<HostedClientService> _logger;
 
-    public HostedClientService(ILogger<HostedClientService> logger, IConfiguration configuration, IInteractionHandler interactionHandler, DiscordSocketClient client)
+    public HostedClientService( IConfiguration configuration, IInteractionHandler interactionHandler, DiscordSocketClient client)
     {
-        _logger = logger;
         _configuration = configuration;
         _interactionHandler = interactionHandler;
         _client = client;
@@ -30,8 +29,9 @@ public class HostedClientService : IHostedService
 
     private Task LogAsync(LogMessage log)
     {
-        _logger.LogInformation(log.Message);
-        _logger.LogWarning(log.Exception?.ToString());
+        Log.Information(log.Message);
+        if (log.Exception != null)
+            Log.Warning(log.Exception.ToString());
 
         return Task.CompletedTask;
     }

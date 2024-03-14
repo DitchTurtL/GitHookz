@@ -2,6 +2,7 @@
 using Octokit.Webhooks;
 using Octokit.Webhooks.Events;
 using Octokit.Webhooks.Events.PullRequest;
+using Serilog;
 
 namespace GitHookz.Services;
 
@@ -30,12 +31,21 @@ public class EventProcessor : WebhookEventProcessor
         return base.ProcessDeleteWebhookAsync(headers, deleteEvent);
     }
 
+    /// <summary>
+    /// Process a Pull Request Event
+    /// </summary>
     protected override Task ProcessPullRequestWebhookAsync(WebhookHeaders headers, PullRequestEvent pullRequestEvent, PullRequestAction action)
     {
+        // Get the repo's FullName. This is how we will identify the targets
         var repoName = pullRequestEvent.Repository?.FullName ?? "Unknown";
+
+        // Get all target channels/threads for this repo to be broadcast to
         var targets = _databaseService.GetWebHookDataByRepoFullName(repoName);
+
+        // Action text for what the user did
         var actionText = StringConstants.ToTitleCase(pullRequestEvent.Action ?? "Interacted with") + " a Pull Request";
 
+        Log.Information($"Processing Pull Request Event: {actionText} on {repoName}");
 
         foreach (var target in targets)
             _interactionHandler.SendMessageAsync(
@@ -48,8 +58,6 @@ public class EventProcessor : WebhookEventProcessor
                 pullRequestEvent.PullRequest?.HtmlUrl ?? ""
                 );
 
-
         return base.ProcessPullRequestWebhookAsync(headers, pullRequestEvent, action);
     }
-
 }
