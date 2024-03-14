@@ -8,8 +8,8 @@ services:
       args:
         - BUILD_CONFIGURATION=Release
     ports:
-      - "5048:5048"
-      - "5049:5049"
+      - "2044:2044"
+      - "2045:2045"
     volumes:
       - ./data:/app/Data
       - ./logs:/app/Logs
