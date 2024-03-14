@@ -2,6 +2,7 @@
 using Discord.WebSocket;
 using Discord;
 using System.Reflection;
+using GitHookz.Data;
 
 namespace GitHookz.Services;
 
@@ -94,12 +95,24 @@ public class InteractionHandler : IInteractionHandler
             }
     }
 
-    public Task SendMessageAsync(string channelId)
+    public Task SendMessageAsync(string channelId, string title, string authorName, string description, string content, string avatarUrl, string repoUrl)
     {
         var channel = _client.GetChannel(ulong.Parse(channelId)) as IMessageChannel;
         if (channel == null)
             return Task.CompletedTask;
 
-        return channel.SendMessageAsync("Hello, World!");
+
+        var embed = new EmbedBuilder()
+            .WithTitle(title)
+            .WithUrl(repoUrl)
+            .WithDescription(description)
+            .WithThumbnailUrl(avatarUrl)
+            .WithAuthor(authorName)
+            .WithFooter(StringConstants.APP_NAME)
+            .WithColor(Color.Blue);
+
+        embed.AddField("\u200B", content);
+
+        return channel.SendMessageAsync(embed: embed.Build());
     }
 }
