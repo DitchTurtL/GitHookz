@@ -16,6 +16,8 @@ public class EventProcessor : WebhookEventProcessor
     protected override Task ProcessCreateWebhookAsync(WebhookHeaders headers, CreateEvent createEvent)
     {
         var repoName = createEvent.Repository?.FullName ?? "Unknown";
+        var targets = _databaseService.GetWebHookDataByRepoFullName(repoName);
+
 
         return base.ProcessCreateWebhookAsync(headers, createEvent);
     }
@@ -27,6 +29,9 @@ public class EventProcessor : WebhookEventProcessor
 
     protected override Task ProcessPullRequestWebhookAsync(WebhookHeaders headers, PullRequestEvent pullRequestEvent, PullRequestAction action)
     {
+        var repoName = pullRequestEvent.Repository?.FullName ?? "Unknown";
+        var targets = _databaseService.GetWebHookDataByRepoFullName(repoName);
+
         return base.ProcessPullRequestWebhookAsync(headers, pullRequestEvent, action);
     }
 

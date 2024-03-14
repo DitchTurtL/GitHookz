@@ -4,7 +4,7 @@ public class WebHookData
 {
     public string Type { get; set; }
     public string RecipientId { get; set; }
-    public string WebHookUrl { get; set; }
+    public string RepoFullname { get; set; }
 
     public WebHookData(string data)
     {
@@ -18,13 +18,13 @@ public class WebHookData
         var split = data.Split(':');
         Type = split[0];
         RecipientId = split[1];
-        WebHookUrl = split[2];
+        RepoFullname = split[2];
     }
 
-    public WebHookData(string type, string recipientId, string webHookUrl)
+    public WebHookData(string type, string recipientId, string repoFullname)
     {
         Type = type;
         RecipientId = recipientId;
-        WebHookUrl = webHookUrl;
+        RepoFullname = repoFullname;
     }
 }

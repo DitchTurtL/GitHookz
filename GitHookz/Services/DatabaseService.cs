@@ -38,9 +38,12 @@ public class DatabaseService : IDatabaseService
     public void AddWebHookData(WebHookData data)
     {
         webHookDatas.Add(data);
-        File.AppendAllLines(StringConstants.WEBHOOK_DATA_FILE, new string[] { data.Type + ":" + data.RecipientId + ":" + data.WebHookUrl });
+        File.AppendAllLines(StringConstants.WEBHOOK_DATA_FILE, new string[] { data.Type + ":" + data.RecipientId + ":" + data.RepoFullname });
     }
 
-
+    public List<WebHookData> GetWebHookDataByRepoFullName(string repoName)
+    {
+        return webHookDatas.Where(x => x.RepoFullname.Equals(repoName)).ToList();
+    }
 
 }
