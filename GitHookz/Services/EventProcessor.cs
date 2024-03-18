@@ -51,14 +51,14 @@ public class EventProcessor : WebhookEventProcessor
 
         foreach (var commit in commits)
         {
-            var commitId = commit.Id;
+            var commitId = commit.Id[0..5];
             var commitUrl = commit.Url;
             var commitMessage = commit.Message;
 
             var newField = new EmbedFieldBuilder
             {
-                Name = $"[{commitId}]({commitUrl})",
-                Value = commitMessage
+                Name = commitId,
+                Value = $"[{commitId}]({commitUrl}) {commitMessage}"
             };
 
             embed.AddField(newField);
