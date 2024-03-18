@@ -100,4 +100,3 @@ public class EventProcessor : WebhookEventProcessor
         return base.ProcessPullRequestWebhookAsync(headers, pullRequestEvent, action);
     }
 }
-
