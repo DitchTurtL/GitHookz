@@ -57,7 +57,7 @@ public class EventProcessor : WebhookEventProcessor
 
             var newField = new EmbedFieldBuilder
             {
-                Name = commitId,
+                Name = "\u200B",
                 Value = $"[{commitId}]({commitUrl}) {commitMessage}"
             };
 
