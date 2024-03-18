@@ -9,7 +9,6 @@ services:
         - BUILD_CONFIGURATION=Release
     ports:
       - "2044:2044"
-      - "2045:2045"
     volumes:
       - ./data:/app/Data
       - ./logs:/app/Logs

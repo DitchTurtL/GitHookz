@@ -1,6 +1,0 @@
-@GitHookz_HostAddress = http://localhost:5085
-
-GET {{GitHookz_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
