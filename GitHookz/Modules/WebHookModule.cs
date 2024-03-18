@@ -2,6 +2,7 @@
 using Discord;
 using GitHookz.Data.Models;
 using GitHookz.Services;
+using GitHookz.Data;
 
 namespace GitHookz.Modules;
 
@@ -16,24 +17,30 @@ public class WebHookModule : InteractionModuleBase<SocketInteractionContext>
         _databaseService = databaseService;
     }
 
-    [SlashCommand("add_webhook", "Create a new webhook at this location for your project repo.")]
+    [SlashCommand("webhook", "Create a new webhook at this location for your project repo.")]
     public async Task AddWebhook([Summary(description: "Repo URL")] string repoUrl)
     {
-        string type = string.Empty;
+        RecipientType type;
         if (Context.Channel is IThreadChannel)
-        {
-            type = "T";
-        }
+            type = RecipientType.Thread;
         else
-        {
-            type = "C";
-        }
+            type = RecipientType.Channel;
 
-        var channelId = Context.Channel.Id.ToString();
         var repoDetails = RepoDetails.GetRepoDetails(repoUrl);
         var repoFullName = $"{repoDetails.Owner}/{repoDetails.Repo}";
 
-        var data = new WebHookData(type, channelId, repoFullName);
+        var data = new WebHookData
+        {
+            Type = type,
+            GuildId = (long)Context.Guild.Id,
+            RecipientId = (long)Context.Channel.Id,
+            RecipientName = Context.Channel.Name,
+            RepoFullname = repoFullName,
+            AddedBy = Context.User.Username,
+            AddedAt = DateTime.Now,
+            AddedById = (long)Context.User.Id
+        };
+
         var success = _databaseService.AddWebHookData(data);
 
         var webhookUrl = $"{_config["external_url"]}{_config["webhook_endpoint"]}";

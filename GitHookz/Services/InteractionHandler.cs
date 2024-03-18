@@ -95,9 +95,9 @@ public class InteractionHandler : IInteractionHandler
             }
     }
 
-    public Task SendMessageAsync(string channelId, string title, string authorName, string description, string content, string avatarUrl, string repoUrl)
+    public Task SendMessageAsync(long channelId, string title, string authorName, string description, string content, string avatarUrl, string repoUrl)
     {
-        var channel = _client.GetChannel(ulong.Parse(channelId)) as IMessageChannel;
+        var channel = _client.GetChannel((ulong)channelId) as IMessageChannel;
         if (channel == null)
             return Task.CompletedTask;
 
@@ -109,10 +109,19 @@ public class InteractionHandler : IInteractionHandler
             .WithThumbnailUrl(avatarUrl)
             .WithAuthor(authorName)
             .WithFooter(StringConstants.APP_NAME)
-            .WithColor(Color.Blue);
+            .WithColor(Discord.Color.Blue);
 
         embed.AddField("\u200B", content);
 
         return channel.SendMessageAsync(embed: embed.Build());
+    }
+
+    public Task SendPushMessageAsync(long recipientId, Embed embed)
+    {
+        var channel = _client.GetChannel((ulong)recipientId) as IMessageChannel;
+        if (channel == null)
+            return Task.CompletedTask;
+
+        return channel.SendMessageAsync(embed: embed);
     }
 }

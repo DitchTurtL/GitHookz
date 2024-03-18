@@ -1,8 +1,10 @@
-﻿using GitHookz.Data;
+﻿using Discord;
+using GitHookz.Data;
 using Octokit.Webhooks;
 using Octokit.Webhooks.Events;
 using Octokit.Webhooks.Events.PullRequest;
 using Serilog;
+using System.Threading.Channels;
 
 namespace GitHookz.Services;
 
@@ -31,6 +33,43 @@ public class EventProcessor : WebhookEventProcessor
         return base.ProcessDeleteWebhookAsync(headers, deleteEvent);
     }
 
+    protected override Task ProcessPushWebhookAsync(WebhookHeaders headers, PushEvent pushEvent)
+    {
+        var repoName = pushEvent.Repository?.FullName ?? "Unknown";
+        var repoUrl = pushEvent.Repository?.HtmlUrl ?? "Unknown";
+        var authorName = pushEvent.Pusher?.Name ?? "Unknown";
+        var targets = _databaseService.GetWebHookDataByRepoFullName(repoName);
+        var commits = pushEvent.Commits;
+        var actionText = $"Pushed {commits.Count()} commits to {repoName}";
+
+        var embed = new EmbedBuilder()
+            .WithTitle(actionText)
+            .WithUrl(repoUrl)
+            .WithAuthor(authorName)
+            .WithFooter(StringConstants.APP_NAME)
+            .WithColor(Discord.Color.Blue);
+
+        foreach (var commit in commits)
+        {
+            var commitId = commit.Id;
+            var commitUrl = commit.Url;
+            var commitMessage = commit.Message;
+
+            var newField = new EmbedFieldBuilder
+            {
+                Name = "[commitId](commitUrl)",
+                Value = commitMessage
+            };
+
+            embed.AddField(newField);
+        }
+
+        foreach (var target in targets)
+            _interactionHandler.SendPushMessageAsync(target.RecipientId, embed.Build());
+
+        return base.ProcessPushWebhookAsync(headers, pushEvent);
+    }
+
     /// <summary>
     /// Process a Pull Request Event
     /// </summary>
@@ -49,12 +88,12 @@ public class EventProcessor : WebhookEventProcessor
 
         foreach (var target in targets)
             _interactionHandler.SendMessageAsync(
-                target.RecipientId, 
-                pullRequestEvent.Repository?.Name ?? "Unknown Repo", 
-                pullRequestEvent.Sender?.Login ?? "Unknown User", 
+                target.RecipientId,
+                pullRequestEvent.Repository?.Name ?? "Unknown Repo",
+                pullRequestEvent.Sender?.Login ?? "Unknown User",
                 actionText,
                 pullRequestEvent.PullRequest?.Title ?? "No Title",
-                pullRequestEvent.Sender?.AvatarUrl ?? "", 
+                pullRequestEvent.Sender?.AvatarUrl ?? "",
                 pullRequestEvent.PullRequest?.HtmlUrl ?? ""
                 );
 
