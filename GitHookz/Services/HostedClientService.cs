@@ -41,5 +41,4 @@ public class HostedClientService : IHostedService
     {
         return Task.CompletedTask;
     }
-
 }
