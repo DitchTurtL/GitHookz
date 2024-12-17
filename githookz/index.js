@@ -10,12 +10,12 @@ const registerCommands = require("./utils/commands"); // Register interactions w
 const setupEvents = require("./utils/clientEvents"); // Register Bot events
 
 const app = express(); // Create the Express app
-app.use(express.json({ limit: "5mb" })); // Parse JSON request bodies
+app.use(express.json({ limit: "5mb" }));
 app.use("/webhook", webhookRoute); // Webhook endpoint
 
 // Start the express server
 app.listen(config.PORT, () => {
-  logger.info(`Server running at http://localhost:${config.PORT}`);
+  logger.info(`Backend running at ${config.BASE_URL}:${config.PORT}`);
 });
 
 // Create the bot client

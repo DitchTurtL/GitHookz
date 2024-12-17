@@ -16,5 +16,6 @@ module.exports = {
   CLIENT_ID: getEnvVariable("CLIENT_ID"),
   GUILD_ID: getEnvVariable("GUILD_ID"),
   BOT_TOKEN: getEnvVariable("BOT_TOKEN"),
+  BASE_URL: getEnvVariable("BASE_URL"),
   PORT: process.env.PORT || 3000, // Default value as fallback
 };
