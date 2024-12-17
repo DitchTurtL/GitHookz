@@ -3,8 +3,6 @@ const { Routes } = require("discord-api-types/v9");
 const { REST } = require("@discordjs/rest");
 const logger = require("./logger");
 
-const config = require("./config");
-
 // Define slash commands
 const commandsToMap = [
   new SlashCommandBuilder()
@@ -21,8 +19,8 @@ const commandsToMap = [
 ].map((command) => command.toJSON());
 
 // Register the commands with Discord
-const rest = new REST({ version: "9" }).setToken(config.BOT_TOKEN);
-async function registerCommands() {
+async function registerCommands(config) {
+  const rest = new REST({ version: "9" }).setToken(config.BOT_TOKEN);
   try {
     logger.info("Started refreshing application (/) commands.");
 
