@@ -1,0 +1,206 @@
+﻿@page "/add-project"
+@page "/add-project/{authId}"
+@using GitHookz.Data
+@using GitHookz.Services
+@inject IAuthenticationService AuthenticationService
+@inject IDatabaseService DatabaseService
+@inject IGithubService GithubService
+@inject Blazored.SessionStorage.ISessionStorageService SessionStorage
+
+@{
+    var pageHeading = (authenticatedSession == null) ? "Add A Project" : "Add Your Project";
+}
+<MudText Typo="Typo.h4">@pageHeading</MudText>
+
+@if (string.IsNullOrEmpty(authId)) 
+{
+    <MudPaper Elevation="3">
+        Visit us on discord to add projects of your own.
+    </MudPaper>
+}
+else {
+    <!-- Authentication -->
+    @if (authenticatedSession == null) 
+    {
+        @if (!AuthFailed)
+        {
+            <!-- TODO: Make Authenticating... look better -->
+            <!-- This is shown while we query the Authentication service to check that the token was created via Discord-->
+            <MudPaper Elevation="3">
+                <MudText Typo="Typo.h6">Authenticating...</MudText>
+                <MudProgressLinear Indeterminate="true" />
+            </MudPaper>
+        } 
+        else 
+        {
+            <MudPaper Elevation="3">
+                <MudText Typo="Typo.h6">Authentication Failed</MudText>
+            </MudPaper>
+            <!-- TODO: Make Authentication Failed look better -->
+        }
+    }
+    else // Authenticated
+    {
+        if (ProjectAdded)
+        {
+            <MudPaper Elevation="3">
+                <MudText Typo="Typo.h6">Project Added Successfully!</MudText>
+            </MudPaper>
+            <!-- TODO: Make Project Added Success look better -->
+        }
+        else 
+        {
+            <MudGrid>
+                <MudItem xs="12" sm="8">
+                    <MudCard Class="pa-4">
+                        <MudCardHeader>
+                            Adding your repo&nbsp;
+                            <MudLink Href="@authenticatedSession.RepositoryUrl" Target="_new">@authenticatedSession.RepositoryName</MudLink>
+                        </MudCardHeader>
+                        <MudCardContent>
+
+                            @if (ProjectDetails != null)
+                            {
+                                <MudContainer>
+                                    <MudText Typo="Typo.body1">@ProjectDetails.Description</MudText>
+                                </MudContainer>
+
+                            }
+
+                            <MudStack Row="true" Wrap="Wrap.Wrap" AlignItems="AlignItems.Center" Class="mt-4">
+                                <MudStack Row="true">
+                                    <MudText Typo="Typo.body1">Registered&nbsp;to</MudText>
+                                    <MudText Typo="Typo.body1" Color="Color.Primary">@authenticatedSession.UserName</MudText>
+                                </MudStack>
+                                <MudStack Row="true">
+                                    <MudText Typo="Typo.body1">on&nbsp;channel</MudText>
+                                    <MudText Typo="Typo.body1" Color="Color.Primary">@authenticatedSession.ChannelName</MudText>
+                                </MudStack>
+                            </MudStack>
+
+                            @if (!string.IsNullOrEmpty(ErrorText))
+                            {
+                                <MudContainer Class="mt-2">
+                                    <MudText Typo="Typo.h6" Color="Color.Error">
+                                        @ErrorText
+                                    </MudText>
+                                </MudContainer>
+                            }
+
+                            <MudText Typo="Typo.caption" Class="ml-6">
+                                Be sure to click the link above to check that the repo url is correct.
+                            </MudText>
+                        </MudCardContent>
+                        <MudCardActions>
+                            <MudButton OnClick="AddProject_Clicked" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Add Project</MudButton>
+                        </MudCardActions>
+                    </MudCard>
+                </MudItem>
+
+                <MudItem xs="12" sm="8">
+
+                    <MudPaper Elevation="3" Class="pa-6">
+                        <MudText Typo="Typo.h6" Align="Align.Center">Configuring Github WebHooks</MudText>
+                        <MudText Typo="Typo.body1">To configure your webhooks, visit the settings page of your repository on github.</MudText>
+                    </MudPaper>
+                </MudItem>
+
+            </MudGrid>
+        }
+
+    }
+
+
+
+
+}
+
+
+@code {
+    [Parameter]
+    public string? authId { get; set; }
+
+    private SessionData? authenticatedSession;
+    private string ErrorText = string.Empty;
+    private bool AuthFailed;
+    private bool ProjectAdded;
+
+    private GithubProjectDetails? ProjectDetails;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!string.IsNullOrEmpty(authId))
+        {
+            authenticatedSession = AuthenticationService.GetAuthenticatedSession(authId);
+            if (authenticatedSession == null)
+            {
+                AuthFailed = true;
+            } 
+            else 
+            {
+                ProjectDetails = await GithubService.GetRepositoryDetails(authenticatedSession.RepositoryUrl);
+            }
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && authenticatedSession != null && !AuthFailed) 
+        {
+            var newUserId = DatabaseService.AddUser(new()
+                {
+                    DiscordId = authenticatedSession.UserId,
+                    Name = authenticatedSession.UserName,
+                });
+            if (newUserId > 0)
+            {
+                await SessionStorage.SetItemAsync<int>("userId", newUserId);
+                await SessionStorage.SetItemAsStringAsync("userName", authenticatedSession.UserName);
+                StateHasChanged();
+            }
+            else
+            {
+                ErrorText = "Failed to create your user session.. Something broke.";
+            }
+        }
+
+    }
+
+    private void AddProject_Clicked()
+    {
+        if (authenticatedSession == null)
+        {
+            ErrorText = "No authenticated session found";
+            return;
+        }
+
+        if (string.IsNullOrEmpty(authenticatedSession.RepositoryUrl))
+        {
+            ErrorText = "No repository url found";
+            return;
+        }
+
+        var existingProject = DatabaseService.GetProjectByRepositoryUrl(authenticatedSession.RepositoryUrl);
+        if (existingProject != null)
+        {
+            ErrorText = "Project already exists";
+            return;
+        }
+
+        DatabaseService.AddProject(new()
+        {
+            RepositoryName = authenticatedSession.RepositoryName,
+            RepositoryUrl = authenticatedSession.RepositoryUrl,
+            OwnerId = authenticatedSession.UserId,
+            ChannelId = authenticatedSession.ChannelId,
+            IsPublished = true,
+        });
+
+        ProjectAdded = true;
+    }
+
+
+
+
+}

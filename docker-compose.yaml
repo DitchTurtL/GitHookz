@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  githookz:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - BUILD_CONFIGURATION=Release
+    ports:
+      - "2044:2044"
+    volumes:
+      - ./data:/app/Data
+      - ./logs:/app/Logs

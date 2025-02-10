@@ -1,0 +1,41 @@
+﻿@using GitHookz.Services
+@using MudBlazor
+@inject Blazored.SessionStorage.ISessionStorageService SessionStorage
+
+<MudNavMenu Color="Color.Info">
+    <MudText Typo="Typo.h6" Class="px-4">@LoggedInUsername</MudText>
+    <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">@LoggedInMessage</MudText>
+    <MudDivider Class="my-2" />
+
+    <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Dashboard">Home</MudNavLink>
+    <MudNavLink Href="/my-projects" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Storage">My Projects</MudNavLink>
+    <MudNavLink Href="/add-project" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.LibraryAdd">Add A Project</MudNavLink>
+    <MudNavLink Href="/about" Icon="@Icons.Material.Filled.Info">About</MudNavLink>
+</MudNavMenu>
+
+
+@code {
+    private const string NOT_LOGGED_IN = "NOT LOGGED IN";
+    private const string LOGGED_IN = "LOGGED IN";
+
+    private string LoggedInUsername = "Guest";
+    private string LoggedInMessage = NOT_LOGGED_IN;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender) 
+        {
+            var userName = await SessionStorage.GetItemAsStringAsync("userName");
+            if (!string.IsNullOrEmpty(userName))
+            {
+                LoggedInUsername = userName;
+                LoggedInMessage = LOGGED_IN;
+
+                StateHasChanged();
+            }
+        }
+
+        
+
+    }
+}

@@ -1,0 +1,53 @@
+﻿@page "/my-projects"
+@using GitHookz.Data
+@using GitHookz.Services
+@inject IDatabaseService DatabaseService
+@inject Blazored.SessionStorage.ISessionStorageService SessionStorage
+
+<MudText Typo="Typo.h3">My Projects</MudText>
+
+@if (Projects.Count > 0) 
+{
+    <MudPaper Width="300px">
+        <MudList T="string">
+            <MudListSubheader>
+                Nested List Items
+            </MudListSubheader>
+            @foreach (var project in Projects)
+            {
+                <MudListItem>
+                    @project.RepositoryName
+                </MudListItem>
+
+            }
+
+        </MudList>
+    </MudPaper>
+}
+
+
+@code {
+    private List<ProjectData> Projects { get; set; } = [];
+
+    private string? DiscordId;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var userId = await SessionStorage.GetItemAsync<int>("userId");
+            if (userId > 0)
+            {
+                var user = DatabaseService.GetUserById(userId);
+                if (user != null) 
+                {
+                    DiscordId = user.DiscordId;
+                    Projects = DatabaseService.GetProjectsByOwnerId(DiscordId).ToList();
+                }
+            }
+            StateHasChanged();
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+}
