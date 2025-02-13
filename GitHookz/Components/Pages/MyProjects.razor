@@ -4,30 +4,25 @@
 @inject IDatabaseService DatabaseService
 @inject Blazored.SessionStorage.ISessionStorageService SessionStorage
 
-<MudText Typo="Typo.h3">My Projects</MudText>
+<MudText Typo="Typo.h4" Class="mb-6">My Projects</MudText>
 
-@if (Projects.Count > 0) 
+@if (Projects.Count() > 0) 
 {
-    <MudPaper Width="300px">
-        <MudList T="string">
-            <MudListSubheader>
-                Nested List Items
-            </MudListSubheader>
-            @foreach (var project in Projects)
-            {
-                <MudListItem>
-                    @project.RepositoryName
-                </MudListItem>
-
-            }
-
-        </MudList>
+    <MudPaper>
+        <MudDataGrid Items="@Projects" Filterable="false" SortMode="@SortMode.None" Groupable="false">
+            <Columns>
+                <PropertyColumn Property="x => x.RepositoryName" Title="Repository" />
+                <PropertyColumn Property="x => x.ChannelName" Title="Channel" />
+                <PropertyColumn Property="x => x.CreatedAt" Title="Created" />
+                <PropertyColumn Property="x => x.LastUpdatedAt" Title="Updated" />
+            </Columns>
+        </MudDataGrid>
     </MudPaper>
 }
 
 
 @code {
-    private List<ProjectData> Projects { get; set; } = [];
+    private IEnumerable<ProjectData> Projects { get; set; } = [];
 
     private string? DiscordId;
 
@@ -42,7 +37,7 @@
                 if (user != null) 
                 {
                     DiscordId = user.DiscordId;
-                    Projects = DatabaseService.GetProjectsByOwnerId(DiscordId).ToList();
+                    Projects = DatabaseService.GetProjectsByOwnerId(DiscordId);
                 }
             }
             StateHasChanged();

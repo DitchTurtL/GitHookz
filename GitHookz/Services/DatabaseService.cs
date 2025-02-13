@@ -30,7 +30,7 @@ public class DatabaseService : IDatabaseService
         if (!tables.Contains("projects"))
         {
             _logger.LogInformation("Creating projects table");
-            sql = "CREATE TABLE projects (Id INTEGER PRIMARY KEY AUTOINCREMENT, RepositoryName TEXT, RepositoryUrl TEXT, OwnerId TEXT, ChannelId TEXT, IsPublished INTEGER)";
+            sql = "CREATE TABLE projects (Id INTEGER PRIMARY KEY AUTOINCREMENT, RepositoryName TEXT, RepositoryUrl TEXT, OwnerId TEXT, ChannelId TEXT, ChannelName TEXT, CreatedAt DATETIME, LastUpdatedAt DATETIME, IsPublished INTEGER)";
             conn.Execute(sql);
         }
 
@@ -53,7 +53,7 @@ public class DatabaseService : IDatabaseService
         using var conn = GetConnection();
         conn.Open();
 
-        var sql = "INSERT INTO projects (RepositoryName, RepositoryUrl, OwnerId, ChannelId, IsPublished) VALUES (@RepositoryName, @RepositoryUrl, @OwnerId, @ChannelId, @IsPublished)";
+        var sql = "INSERT INTO projects (RepositoryName, RepositoryUrl, OwnerId, ChannelId, ChannelName, CreatedAt, LastUpdatedAt, IsPublished) VALUES (@RepositoryName, @RepositoryUrl, @OwnerId, @ChannelId, @ChannelName, @CreatedAt, @LastUpdatedAt, @IsPublished)";
         conn.Execute(sql, projectData);
     }
 

@@ -3,11 +3,12 @@ using Discord.Interactions;
 using Discord.WebSocket;
 using GitHookz.Components;
 using GitHookz.Data.Bot;
+using GitHookz.Data.State;
 using GitHookz.Services;
-using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
-using Microsoft.JSInterop;
+using Microsoft.AspNetCore.Mvc;
 using MudBlazor.Services;
 using Serilog;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,13 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
+
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.Listen(System.Net.IPAddress.Any, 5000); // HTTP
+    options.Listen(System.Net.IPAddress.Any, 5001, listenOptions => listenOptions.UseHttps()); // HTTPS
+});
+
 
 // Load environment variables from .env file
 var envFile = Path.Combine(Directory.GetCurrentDirectory(), "Data", ".env");
@@ -36,6 +44,7 @@ builder.Services
 // Add application services to the container.
 builder.Services
     .AddHostedService<HostedBotService>()
+    .AddScoped<NavMenuState>()
     .AddSingleton<IBotService, BotService>()
     .AddSingleton<DiscordSocketClient>()
     .AddSingleton<InteractionHandler>()
@@ -54,12 +63,17 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseRouting();
 app.UseHttpsRedirection();
-
 app.UseStaticFiles();
 app.UseAntiforgery();
-
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
+
+app.MapPost("/webhook", async ([FromBody] JsonDocument payload, HttpContext context, IGithubService githubService) =>
+{
+    await githubService.HandleWebhook(payload, context);
+    return Results.Ok();
+});
 
 app.Run();

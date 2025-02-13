@@ -1,5 +1,7 @@
-﻿@using GitHookz.Services
+﻿@using GitHookz.Data.State
+@using GitHookz.Services
 @using MudBlazor
+@inject NavMenuState NavMenuState
 @inject Blazored.SessionStorage.ISessionStorageService SessionStorage
 
 <MudNavMenu Color="Color.Info">
@@ -21,9 +23,16 @@
     private string LoggedInUsername = "Guest";
     private string LoggedInMessage = NOT_LOGGED_IN;
 
+
+
+    protected override void OnInitialized()
+    {
+        NavMenuState.OnChange += StateHasChanged;
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender) 
+        if (LoggedInUsername == "Guest")
         {
             var userName = await SessionStorage.GetItemAsStringAsync("userName");
             if (!string.IsNullOrEmpty(userName))
@@ -33,9 +42,15 @@
 
                 StateHasChanged();
             }
+
         }
 
         
 
+    }
+
+    public void Dispose()
+    {
+        NavMenuState.OnChange -= StateHasChanged;
     }
 }

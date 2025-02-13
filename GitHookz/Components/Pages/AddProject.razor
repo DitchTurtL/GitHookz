@@ -1,7 +1,9 @@
 ﻿@page "/add-project"
 @page "/add-project/{authId}"
 @using GitHookz.Data
+@using GitHookz.Data.State
 @using GitHookz.Services
+@inject NavMenuState NavMenuState
 @inject IAuthenticationService AuthenticationService
 @inject IDatabaseService DatabaseService
 @inject IGithubService GithubService
@@ -10,12 +12,12 @@
 @{
     var pageHeading = (authenticatedSession == null) ? "Add A Project" : "Add Your Project";
 }
-<MudText Typo="Typo.h4">@pageHeading</MudText>
+<MudText Typo="Typo.h4" Class="mb-6">@pageHeading</MudText>
 
 @if (string.IsNullOrEmpty(authId)) 
 {
     <MudPaper Elevation="3">
-        Visit us on discord to add projects of your own.
+        Visit us on discord to add projects of your own! Or to contribute to this one! This page alone has like 5 TODOs on it.. Has this text wrapped yet?
     </MudPaper>
 }
 else {
@@ -157,6 +159,8 @@ else {
             {
                 await SessionStorage.SetItemAsync<int>("userId", newUserId);
                 await SessionStorage.SetItemAsStringAsync("userName", authenticatedSession.UserName);
+
+                NavMenuState.NotifyStateChanged();
                 StateHasChanged();
             }
             else
@@ -194,6 +198,9 @@ else {
             RepositoryUrl = authenticatedSession.RepositoryUrl,
             OwnerId = authenticatedSession.UserId,
             ChannelId = authenticatedSession.ChannelId,
+            ChannelName = authenticatedSession.ChannelName,
+            CreatedAt = DateTime.UtcNow,
+            LastUpdatedAt = DateTime.UtcNow,
             IsPublished = true,
         });
 
