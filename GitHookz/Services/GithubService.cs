@@ -83,12 +83,12 @@ public class GithubService : IGithubService
         return type switch {
             "ping" => HandlePingEvent(payload),
             "push" => HandlePushEvent(payload),
-            "pull_request" => HandlePullRequestEvent(payload),
-            "issues" => HandleIssuesEvent(payload),
-            "issue_comment" => HandleIssueCommentEvent(payload),
-            "release" => HandleReleaseEvent(payload),
-            "fork" => HandleForkEvent(payload),
-            "watch" => HandleStarEvent(payload),
+            //"pull_request" => HandlePullRequestEvent(payload),
+            //"issues" => HandleIssuesEvent(payload),
+            //"issue_comment" => HandleIssueCommentEvent(payload),
+            //"release" => HandleReleaseEvent(payload),
+            //"fork" => HandleForkEvent(payload),
+            //"watch" => HandleStarEvent(payload),
             _ => Task.CompletedTask
         };
     }
