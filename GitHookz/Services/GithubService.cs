@@ -100,6 +100,7 @@ public class GithubService : IGithubService
 
     private async Task HandlePushEvent(JsonDocument payload)
     {
+        var json = payload.RootElement.ToString();
         throw new NotImplementedException();
     }
 
