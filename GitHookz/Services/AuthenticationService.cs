@@ -22,13 +22,13 @@ public class AuthenticationService : IAuthenticationService
         GetBaseUrl();
 
         // Test an authentication session
-        var testRepoUrl = "https://www.github.com/DitchTurtL/GitHookz";
+        var testRepoUrl = "https://github.com/DitchTurtL/GitHookz";
         var testSession = new SessionData
         {
-            UserId = "testUserId",
+            UserId = "321020061467017218",
             UserName = "DitchTurtL",
-            ChannelId = "testChannelId",
-            ChannelName = "#GitHookz",
+            ChannelId = "1155971639117369415",
+            ChannelName = "#testing",
             RepositoryName = StringHelper.GetRepoNameFromUrl(testRepoUrl),
             RepositoryUrl = testRepoUrl,
             SessionId = "12345"
