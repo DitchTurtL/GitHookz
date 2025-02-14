@@ -140,7 +140,7 @@ public class GithubService : IGithubService
             return null;
         }
 
-        return new SenderDetails(senderUsername, senderProfileUrl, senderAvatarUrl);
+        return new SenderDetails(senderUsername, senderAvatarUrl, senderProfileUrl);
     }
 
     private ProjectData? GetProjectForUrl(string repositoryName, string repositoryUrl)
