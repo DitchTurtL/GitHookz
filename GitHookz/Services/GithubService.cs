@@ -130,7 +130,7 @@ public class GithubService : IGithubService
             return null;
         }
 
-        // Get name and url values
+        // Get name and url values 
         var senderUsername = senderNode.GetProperty("login").GetString();
         var senderProfileUrl = senderNode.GetProperty("html_url").GetString();
         var senderAvatarUrl = senderNode.GetProperty("avatar_url").GetString();
