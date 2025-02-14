@@ -95,10 +95,10 @@ public class BotService : IBotService
         var channel = GetChannelById(channelId);
         if (channel == null) return;
 
-        var title = $"New Push to [{arguments.RepositoryDetails.RepositoryName}]({arguments.RepositoryDetails.RepositoryUrl})";
+        var title = $"New Code Pushed";
 
         var message = $"""
-            [{arguments.SenderDetails.Username}]({arguments.SenderDetails.ProfileUrl}) pushed new changes to {arguments.BranchName}
+            [{arguments.SenderDetails.Username}]({arguments.SenderDetails.ProfileUrl}) pushed new changes to {arguments.BranchName} on [{arguments.RepositoryDetails.RepositoryName}]({arguments.RepositoryDetails.RepositoryUrl})
             \[+{arguments.AddedCount} | {arguments.ModifiedCount} | -{arguments.RemovedCount}\] {arguments.CommitMessage}
             """;
 
