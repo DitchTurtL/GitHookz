@@ -191,21 +191,34 @@ public class GithubService : IGithubService
         var project = GetProjectForUrl(repoDetails.RepositoryName, repoDetails.RepositoryUrl);
         if (project == null) return;
 
-        // TODO: Gather push details
         var senderDetails = GetSenderDetails(payload);
         if (senderDetails == null) return;
 
         var commitsList = payload.RootElement.GetProperty("commits").EnumerateArray().ToList();
-        var lastCommit = commitsList.Last();
+        var lastCommit = commitsList.LastOrDefault();
+        if (lastCommit.ValueKind == JsonValueKind.Undefined)
+        {
+            _logger.LogWarning("No commits found in payload");
+            return;
+        }
 
+        var commitMessage = lastCommit.GetProperty("message").GetString();
+        var addedCount = lastCommit.GetProperty("added").GetArrayLength();
+        var removedCount = lastCommit.GetProperty("removed").GetArrayLength();
+        var modifiedCount = lastCommit.GetProperty("modified").GetArrayLength();
 
+        if (string.IsNullOrEmpty(commitMessage))
+        {
+            _logger.LogWarning("No commit message found in payload");
+            return;
+        }
 
-
-
-
-
-
-        var pushArgs = new PushResponseArguments(repoDetails);
+        var pushArgs = new PushResponseArguments(repoDetails, senderDetails, commitMessage)
+        {
+            AddedCount = addedCount,
+            RemovedCount = removedCount,
+            ModifiedCount = modifiedCount
+        };
         await _botService.SendPushMessage(project.ChannelId!, pushArgs);
     }
 

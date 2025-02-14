@@ -90,9 +90,25 @@ public class BotService : IBotService
         await channel.SendMessageAsync(embed: embed);
     }
 
-    public Task SendPushMessage(string channelId, PushResponseArguments arguments)
+    public async Task SendPushMessage(string channelId, PushResponseArguments arguments)
     {
-        throw new NotImplementedException();
+        var channel = GetChannelById(channelId);
+        if (channel == null) return;
+
+        var message = $"""
+            {arguments.SenderDetails.Username} pushed new code to {arguments.RepositoryDetails.RepositoryName}
+            +{arguments.AddedCount}|{arguments.ModifiedCount}|-{arguments.RemovedCount} {arguments.CommitMessage}
+            """;
+
+        var embed = new EmbedBuilder()
+            .WithTitle("New Push")
+            .WithThumbnailUrl(arguments.SenderDetails.AvatarUrl)
+            .WithDescription(message)
+            .WithColor(Color.Green)
+            .WithTimestamp(DateTimeOffset.Now)
+            .Build();
+
+        await channel.SendMessageAsync(embed: embed);
     }
 
     public Task SendPullRequestMessage(string channelId, PullRequestResponseArguments arguments)
