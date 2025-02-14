@@ -96,7 +96,7 @@ public class BotService : IBotService
         if (channel == null) return;
 
         var message = $"""
-            {arguments.SenderDetails.Username} pushed new code to {arguments.RepositoryDetails.RepositoryName}
+            {arguments.SenderDetails.Username} pushed new code to {arguments.BranchName} on {arguments.RepositoryDetails.RepositoryName}
             +{arguments.AddedCount}|{arguments.ModifiedCount}|-{arguments.RemovedCount} {arguments.CommitMessage}
             """;
 

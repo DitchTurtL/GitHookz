@@ -1,7 +1,7 @@
 {
-    "ref": "refs/heads/main",
-    "before": "0487eec4955cdb14a91597539c74af5b35386d40",
-    "after": "61c7c367951f9bf05189406d5caea149c281cea0",
+    "ref": "refs/heads/dev/testing",
+    "before": "a7d7d5937a29581db745683419625ba4907e85c8",
+    "after": "d585ac412a7eb1bde9f0bc4ecdc65838dd67d207",
     "repository": {
       "id": 771784141,
       "node_id": "R_kgDOLgB9zQ",
@@ -72,14 +72,14 @@
       "releases_url": "https://api.github.com/repos/DitchTurtL/GitHookz/releases{/id}",
       "deployments_url": "https://api.github.com/repos/DitchTurtL/GitHookz/deployments",
       "created_at": 1710374902,
-      "updated_at": "2025-02-12T23:20:22Z",
-      "pushed_at": 1739415601,
+      "updated_at": "2025-02-13T03:02:20Z",
+      "pushed_at": 1739502429,
       "git_url": "git://github.com/DitchTurtL/GitHookz.git",
       "ssh_url": "git@github.com:DitchTurtL/GitHookz.git",
       "clone_url": "https://github.com/DitchTurtL/GitHookz.git",
       "svn_url": "https://github.com/DitchTurtL/GitHookz",
       "homepage": "",
-      "size": 450,
+      "size": 461,
       "stargazers_count": 1,
       "watchers_count": 1,
       "language": "C#",
@@ -93,7 +93,7 @@
       "mirror_url": null,
       "archived": false,
       "disabled": false,
-      "open_issues_count": 1,
+      "open_issues_count": 2,
       "license": {
         "key": "mit",
         "name": "MIT License",
@@ -107,7 +107,7 @@
       "topics": [],
       "visibility": "public",
       "forks": 0,
-      "open_issues": 1,
+      "open_issues": 2,
       "watchers": 1,
       "default_branch": "main",
       "stargazers": 1,
@@ -142,73 +142,53 @@
     "deleted": false,
     "forced": false,
     "base_ref": null,
-    "compare": "https://github.com/DitchTurtL/GitHookz/compare/0487eec4955c...61c7c367951f",
+    "compare": "https://github.com/DitchTurtL/GitHookz/compare/a7d7d5937a29...d585ac412a7e",
     "commits": [
       {
-        "id": "61c7c367951f9bf05189406d5caea149c281cea0",
-        "tree_id": "679654e7c77ee5c0dcd8b8b13a7f4e10997562ff",
+        "id": "d585ac412a7eb1bde9f0bc4ecdc65838dd67d207",
+        "tree_id": "663d41e3e775dd191eded01681a9fbe84e1b94ce",
         "distinct": true,
-        "message": "Some work.. and testing the webhooks",
-        "timestamp": "2025-02-12T21:59:58-05:00",
-        "url": "https://github.com/DitchTurtL/GitHookz/commit/61c7c367951f9bf05189406d5caea149c281cea0",
+        "message": "hmm",
+        "timestamp": "2025-02-13T22:07:07-05:00",
+        "url": "https://github.com/DitchTurtL/GitHookz/commit/d585ac412a7eb1bde9f0bc4ecdc65838dd67d207",
         "author": {
-          "name": "Spellonz",
+          "name": "DitchTurtL",
           "email": "ridium@gmail.com",
           "username": "DitchTurtL"
         },
         "committer": {
-          "name": "Spellonz",
+          "name": "DitchTurtL",
           "email": "ridium@gmail.com",
           "username": "DitchTurtL"
         },
-        "added": [
-          "GitHookz/Data/Github/PingRequest.cs",
-          "GitHookz/Data/State/NavMenuState.cs"
-        ],
+        "added": [],
         "removed": [],
         "modified": [
-          "GitHookz/Components/Layout/NavMenu.razor",
-          "GitHookz/Components/Pages/AddProject.razor",
-          "GitHookz/Components/Pages/MyProjects.razor",
-          "GitHookz/Data/ProjectData.cs",
-          "GitHookz/Program.cs",
-          "GitHookz/Services/DatabaseService.cs",
-          "GitHookz/Services/GithubService.cs",
-          "GitHookz/Services/IGithubService.cs"
+          "GitHookz/Services/BotService.cs"
         ]
       }
     ],
     "head_commit": {
-      "id": "61c7c367951f9bf05189406d5caea149c281cea0",
-      "tree_id": "679654e7c77ee5c0dcd8b8b13a7f4e10997562ff",
+      "id": "d585ac412a7eb1bde9f0bc4ecdc65838dd67d207",
+      "tree_id": "663d41e3e775dd191eded01681a9fbe84e1b94ce",
       "distinct": true,
-      "message": "Some work.. and testing the webhooks",
-      "timestamp": "2025-02-12T21:59:58-05:00",
-      "url": "https://github.com/DitchTurtL/GitHookz/commit/61c7c367951f9bf05189406d5caea149c281cea0",
+      "message": "hmm",
+      "timestamp": "2025-02-13T22:07:07-05:00",
+      "url": "https://github.com/DitchTurtL/GitHookz/commit/d585ac412a7eb1bde9f0bc4ecdc65838dd67d207",
       "author": {
-        "name": "Spellonz",
+        "name": "DitchTurtL",
         "email": "ridium@gmail.com",
         "username": "DitchTurtL"
       },
       "committer": {
-        "name": "Spellonz",
+        "name": "DitchTurtL",
         "email": "ridium@gmail.com",
         "username": "DitchTurtL"
       },
-      "added": [
-        "GitHookz/Data/Github/PingRequest.cs",
-        "GitHookz/Data/State/NavMenuState.cs"
-      ],
+      "added": [],
       "removed": [],
       "modified": [
-        "GitHookz/Components/Layout/NavMenu.razor",
-        "GitHookz/Components/Pages/AddProject.razor",
-        "GitHookz/Components/Pages/MyProjects.razor",
-        "GitHookz/Data/ProjectData.cs",
-        "GitHookz/Program.cs",
-        "GitHookz/Services/DatabaseService.cs",
-        "GitHookz/Services/GithubService.cs",
-        "GitHookz/Services/IGithubService.cs"
+        "GitHookz/Services/BotService.cs"
       ]
     }
   }

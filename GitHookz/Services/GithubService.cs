@@ -202,18 +202,20 @@ public class GithubService : IGithubService
             return;
         }
 
+        var branchName = payload.RootElement.GetProperty("ref").GetString();
         var commitMessage = lastCommit.GetProperty("message").GetString();
         var addedCount = lastCommit.GetProperty("added").GetArrayLength();
         var removedCount = lastCommit.GetProperty("removed").GetArrayLength();
         var modifiedCount = lastCommit.GetProperty("modified").GetArrayLength();
 
-        if (string.IsNullOrEmpty(commitMessage))
+        if (string.IsNullOrEmpty(commitMessage) || string.IsNullOrEmpty(branchName))
         {
-            _logger.LogWarning("No commit message found in payload");
+            _logger.LogWarning("Missing branch name or commit message in payload");
             return;
         }
 
-        var pushArgs = new PushResponseArguments(repoDetails, senderDetails, commitMessage)
+        branchName = branchName.Replace("refs/heads/", "");
+        var pushArgs = new PushResponseArguments(repoDetails, senderDetails, branchName, commitMessage)
         {
             AddedCount = addedCount,
             RemovedCount = removedCount,
