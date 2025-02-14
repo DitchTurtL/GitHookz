@@ -173,6 +173,7 @@ public class GithubService : IGithubService
         
         var project = GetProjectForUrl(repoDetails.RepositoryName, repoDetails.RepositoryUrl);
         if (project == null) return;
+        if (!project.CanSendPing) return;
 
         var pingArgs = new PingReponseArguments(repoDetails);
         await _botService.SendPingMessage(project.ChannelId!, pingArgs);
@@ -190,6 +191,7 @@ public class GithubService : IGithubService
 
         var project = GetProjectForUrl(repoDetails.RepositoryName, repoDetails.RepositoryUrl);
         if (project == null) return;
+        if (!project.CanSendPush) return;
 
         var senderDetails = GetSenderDetails(payload);
         if (senderDetails == null) return;
@@ -233,6 +235,7 @@ public class GithubService : IGithubService
         
         var project = GetProjectForUrl(repoDetails.RepositoryName, repoDetails.RepositoryUrl);
         if (project == null) return;
+        if (!project.CanSendPullRequest) return;
 
         // TODO: Gather pull request details
 
@@ -250,6 +253,7 @@ public class GithubService : IGithubService
         
         var project = GetProjectForUrl(repoDetails.RepositoryName, repoDetails.RepositoryUrl);
         if (project == null) return;
+        if (!project.CanSendPullRequestReview) return;
 
         // TODO: Gather pull request review comment details
 
@@ -266,6 +270,7 @@ public class GithubService : IGithubService
         
         var project = GetProjectForUrl(repoDetails.RepositoryName, repoDetails.RepositoryUrl);
         if (project == null) return;
+        if (!project.CanSendIssue) return;
 
         // TODO: Gather issue details
 
@@ -282,6 +287,7 @@ public class GithubService : IGithubService
         
         var project = GetProjectForUrl(repoDetails.RepositoryName, repoDetails.RepositoryUrl);
         if (project == null) return;
+        if (!project.CanSendIssueComment) return;
 
         // TODO: Gather issue comment details
 
@@ -298,6 +304,7 @@ public class GithubService : IGithubService
         
         var project = GetProjectForUrl(repoDetails.RepositoryName, repoDetails.RepositoryUrl);
         if (project == null) return;
+        if (!project.CanSendRelease) return;
 
         // TODO: Gather release details
 
@@ -313,6 +320,7 @@ public class GithubService : IGithubService
 
         var project = GetProjectForUrl(repoDetails.RepositoryName, repoDetails.RepositoryUrl);
         if (project == null) return;
+        if (!project.CanSendFork) return;
 
         // TODO: Gather fork details
 
@@ -329,10 +337,12 @@ public class GithubService : IGithubService
         
         var project = GetProjectForUrl(repoDetails.RepositoryName, repoDetails.RepositoryUrl);
         if (project == null) return;
+        if (!project.CanSendStar) return;
 
         // TODO: Gather star details
 
         var starArgs = new StarResponseArguments(repoDetails);
         await _botService.SendStarMessage(project.ChannelId!, starArgs);
     }
+
 }
