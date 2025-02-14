@@ -113,36 +113,36 @@ public class BotService : IBotService
 
     public Task SendPullRequestMessage(string channelId, PullRequestResponseArguments arguments)
     {
-        throw new NotImplementedException();
+        return Task.CompletedTask;
     }
 
     public Task SendPullRequestReviewCommentMessage(string channelId, PullRequestReviewCommentResponseArguments arguments)
     {
-        throw new NotImplementedException();
+        return Task.CompletedTask;
     }
 
     public Task SendIssueMessage(string channelId, IssueResponseArguments arguments)
     {
-        throw new NotImplementedException();
+        return Task.CompletedTask;
     }
 
     public Task SendIssueCommentMessage(string channelId, IssueCommentResponseArguments arguments)
     {
-        throw new NotImplementedException();
+        return Task.CompletedTask;
     }
 
     public Task SendReleaseMessage(string channelId, ReleaseResponseArguments arguments)
     {
-        throw new NotImplementedException();
+        return Task.CompletedTask;
     }
 
     public Task SendForkMessage(string channelId, ForkResponseArguments arguments)
     {
-        throw new NotImplementedException();
+        return Task.CompletedTask;
     }
 
     public Task SendStarMessage(string channelId, StarResponseArguments arguments)
     {
-        throw new NotImplementedException();
+        return Task.CompletedTask;
     }
 }
