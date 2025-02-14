@@ -98,7 +98,7 @@ public class BotService : IBotService
         var message = $"""
             {arguments.SenderDetails.Username} pushed new code to {arguments.RepositoryDetails.RepositoryName}
             +{arguments.AddedCount}|{arguments.ModifiedCount}|-{arguments.RemovedCount} {arguments.CommitMessage}
-            """;
+            """; 
 
         var embed = new EmbedBuilder()
             .WithTitle("New Push")
