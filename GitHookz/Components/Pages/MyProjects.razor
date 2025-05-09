@@ -9,14 +9,38 @@
 @if (Projects.Count() > 0) 
 {
     <MudPaper>
-        <MudDataGrid Items="@Projects" Filterable="false" SortMode="@SortMode.None" Groupable="false">
-            <Columns>
-                <PropertyColumn Property="x => x.RepositoryName" Title="Repository" />
-                <PropertyColumn Property="x => x.ChannelName" Title="Channel" />
-                <PropertyColumn Property="x => x.CreatedAt" Title="Created" />
-                <PropertyColumn Property="x => x.LastUpdatedAt" Title="Updated" />
-            </Columns>
-        </MudDataGrid>
+
+        <MudExpansionPanels>
+            @foreach (var project in Projects)
+            {
+                <MudExpansionPanel Text="@project.RepositoryName">
+                    <MudText>Details:</MudText>
+                    <MudText>Channel: @project.ChannelName</MudText>
+                    <MudText>Created: @project.CreatedAt</MudText>
+                    <MudText>Updated: @project.LastUpdatedAt</MudText>
+
+
+                    <MudText Class="mt-6">Webhooks:</MudText>
+                    <MudStack Wrap="Wrap.Wrap" Row="true" AlignItems="AlignItems.Center">
+                        <MudSwitch @bind-Value="project.CanSendPing" Label="Ping" Color="Color.Primary" />
+                        <MudSwitch @bind-Value="project.CanSendIssue" Label="Issue" Color="Color.Primary" />
+                        <MudSwitch @bind-Value="project.CanSendIssueComment" Label="Issue Comment" Color="Color.Primary" />
+                        <MudSwitch @bind-Value="project.CanSendPull" Label="Pull" Color="Color.Primary" />
+                        <MudSwitch @bind-Value="project.CanSendPullRequest" Label="Pull Request" Color="Color.Primary" />
+                        <MudSwitch @bind-Value="project.CanSendPullRequestReview" Label="Pull Request Review" Color="Color.Primary" />
+                        <MudSwitch @bind-Value="project.CanSendPush" Label="Push" Color="Color.Primary" />
+                        <MudSwitch @bind-Value="project.CanSendFork" Label="Fork" Color="Color.Primary" />
+                        <MudSwitch @bind-Value="project.CanSendStar" Label="Star" Color="Color.Primary" />
+                        <MudSwitch @bind-Value="project.CanSendWatch" Label="Watch" Color="Color.Primary" />
+                        <MudSwitch @bind-Value="project.CanSendRelease" Label="Release" Color="Color.Primary" />
+                    </MudStack>
+
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => UpdateProject(project))">
+                        Update
+                    </MudButton>
+                </MudExpansionPanel>
+            }
+        </MudExpansionPanels>
     </MudPaper>
 }
 
@@ -44,5 +68,13 @@
         }
 
         await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private Task UpdateProject(ProjectData project)
+    {
+        // Here you can send the updated project data to an API
+        DatabaseService.UpdateProject(project);
+
+        return Task.CompletedTask;
     }
 }

@@ -1,10 +1,8 @@
 ﻿using Discord.WebSocket;
 using Discord;
 using Discord.Interactions;
-using System.Globalization;
-using System.Reflection;
 using GitHookz.Data.Bot;
-using System.Reflection.Metadata;
+using GitHookz.Data.Bot.ResponseArguments;
 
 namespace GitHookz.Services;
 
@@ -62,6 +60,91 @@ public class BotService : IBotService
     private Task LogAsync(LogMessage message)
     {
         _logger.LogInformation(message.ToString());
+        return Task.CompletedTask;
+    }
+
+    private IMessageChannel? GetChannelById(string channelId)
+    {
+        var channel = _client.GetChannel(ulong.Parse(channelId)) as IMessageChannel;
+        if (channel == null)
+        {
+            _logger.LogError("Channel not found: {channelId}", channelId);
+            return null;
+        }
+        return channel;
+    }
+
+    public async Task SendPingMessage(string channelId, PingReponseArguments arguments)
+    {
+        var channel = GetChannelById(channelId);
+        if (channel == null) return;
+
+        var message = $"Your {arguments.RepositoryDetails.RepositoryName} repository is connected to GitHookz!";
+        var embed = new EmbedBuilder()
+            .WithTitle("GitHookz is working!")
+            .WithDescription(message)
+            .WithColor(Color.Blue)
+            .WithTimestamp(DateTimeOffset.Now)
+            .Build();
+
+        await channel.SendMessageAsync(embed: embed);
+    }
+
+    public async Task SendPushMessage(string channelId, PushResponseArguments arguments)
+    {
+        var channel = GetChannelById(channelId);
+        if (channel == null) return;
+
+        var title = $"New Code Pushed";
+
+        var message = $"""
+            [{arguments.SenderDetails.Username}]({arguments.SenderDetails.ProfileUrl}) pushed new changes to {arguments.BranchName} on [{arguments.RepositoryDetails.RepositoryName}]({arguments.RepositoryDetails.RepositoryUrl})
+            \[+{arguments.AddedCount} | {arguments.ModifiedCount} | -{arguments.RemovedCount}\] {arguments.CommitMessage}
+            """;
+
+        var embed = new EmbedBuilder()
+            .WithTitle(title)
+            .WithThumbnailUrl(arguments.SenderDetails.AvatarUrl)
+            .WithDescription(message)
+            .WithColor(Color.Green)
+            .WithTimestamp(DateTimeOffset.Now)
+            .Build();
+
+        await channel.SendMessageAsync(embed: embed);
+    }
+
+    public Task SendPullRequestMessage(string channelId, PullRequestResponseArguments arguments)
+    {
+        return Task.CompletedTask;
+    }
+
+    public Task SendPullRequestReviewCommentMessage(string channelId, PullRequestReviewCommentResponseArguments arguments)
+    {
+        return Task.CompletedTask;
+    }
+
+    public Task SendIssueMessage(string channelId, IssueResponseArguments arguments)
+    {
+        return Task.CompletedTask;
+    }
+
+    public Task SendIssueCommentMessage(string channelId, IssueCommentResponseArguments arguments)
+    {
+        return Task.CompletedTask;
+    }
+
+    public Task SendReleaseMessage(string channelId, ReleaseResponseArguments arguments)
+    {
+        return Task.CompletedTask;
+    }
+
+    public Task SendForkMessage(string channelId, ForkResponseArguments arguments)
+    {
+        return Task.CompletedTask;
+    }
+
+    public Task SendStarMessage(string channelId, StarResponseArguments arguments)
+    {
         return Task.CompletedTask;
     }
 }

@@ -30,7 +30,16 @@ public class DatabaseService : IDatabaseService
         if (!tables.Contains("projects"))
         {
             _logger.LogInformation("Creating projects table");
-            sql = "CREATE TABLE projects (Id INTEGER PRIMARY KEY AUTOINCREMENT, RepositoryName TEXT, RepositoryUrl TEXT, OwnerId TEXT, ChannelId TEXT, ChannelName TEXT, CreatedAt DATETIME, LastUpdatedAt DATETIME, IsPublished INTEGER)";
+            sql = """
+                CREATE TABLE projects
+                (Id INTEGER PRIMARY KEY AUTOINCREMENT, RepositoryName TEXT, 
+                RepositoryUrl TEXT, OwnerId TEXT, ChannelId TEXT, ChannelName TEXT, 
+                CreatedAt DATETIME, LastUpdatedAt DATETIME, IsPublished INTEGER, 
+                CanSendPing BOOLEAN, CanSendIssue BOOLEAN, CanSendIssueComment BOOLEAN, 
+                CanSendPullRequest BOOLEAN, CanSendPush BOOLEAN, CanSendPull BOOLEAN, 
+                CanSendPullRequestReview BOOLEAN, CanSendRelease BOOLEAN, 
+                CanSendFork BOOLEAN, CanSendWatch BOOLEAN)
+                """;
             conn.Execute(sql);
         }
 
@@ -110,7 +119,27 @@ public class DatabaseService : IDatabaseService
         using var conn = GetConnection();
         conn.Open();
 
-        var sql = "UPDATE projects SET RepositoryName = @RepositoryName, RepositoryUrl = @RepositoryUrl, OwnerId = @OwnerId, ChannelId = @ChannelId, IsPublished = @IsPublished WHERE Id = @Id";
+        var sql = """
+            UPDATE projects SET 
+            RepositoryName = @RepositoryName, 
+            RepositoryUrl = @RepositoryUrl, 
+            OwnerId = @OwnerId, 
+            ChannelId = @ChannelId, 
+            ChannelName = @ChannelName,
+            IsPublished = @IsPublished,
+            CanSendPing = @CanSendPing,
+            CanSendIssue = @CanSendIssue,
+            CanSendIssueComment = @CanSendIssueComment,
+            CanSendPullRequest = @CanSendPullRequest,
+            CanSendPush = @CanSendPush,
+            CanSendPull = @CanSendPull,
+            CanSendPullRequestReview = @CanSendPullRequestReview,
+            CanSendRelease = @CanSendRelease,
+            CanSendFork = @CanSendFork,
+            CanSendWatch = @CanSendWatch
+            WHERE Id = @Id
+            """;
+
         conn.Execute(sql, projectData);
     }
 
